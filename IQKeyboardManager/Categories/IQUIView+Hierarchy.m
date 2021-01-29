@@ -227,7 +227,19 @@
 - (NSArray<UIView*>*)responderSiblings
 {
     //	Getting all siblings
-    NSArray<UIView*> *siblings = self.superview.subviews;
+    NSArray<UIView*> *siblings;
+    if ([NSStringFromClass([self.superview class]) isEqualToString:@"UnderLineTextView"]){
+        NSMutableArray *newSiblings = [NSMutableArray new];
+        for (UIView *subview in self.superview.superview.subviews){
+            [newSiblings addObject:subview];
+            for (UIView *subsubview in subview.subviews) {
+                [newSiblings addObject:subsubview];
+            }
+        }
+        siblings = newSiblings;
+    } else {
+        siblings = self.superview.subviews;
+    }
     
     //Array of (UITextField/UITextView's).
     NSMutableArray<UIView*> *tempTextFields = [[NSMutableArray alloc] init];
